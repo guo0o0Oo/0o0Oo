@@ -1,0 +1,112 @@
+#include<bits/stdc++.h>
+using namespace std;
+using ll=long long;
+const ll sup=0x3f3f3f3f3f3f3f3f;
+const ll inf=-0x3f3f3f3f3f3f3f3f;
+struct st{
+    bool if_op;
+    ll fig;
+    char op;
+};
+list<char> op;
+list<st> res;
+list<ll> par;
+string s;
+ll lev(char ch){
+    switch(ch){
+        case '+':
+        case '-':
+            return 1;
+        case '*':
+        case '/':
+            return 2;
+        case '^':
+            return 3;
+        case '(':
+        case ')':
+            return 0;
+        case '@':
+            return inf;
+    }
+}
+ll com(ll a,ll b,char ch){
+    switch(ch){
+        case '+':
+            return a+b;
+        case '-':
+            return a-b;
+        case '*':
+            return a*b;
+        case '/':
+            return a/b;
+        case '^':
+            return pow(a,b);
+    }
+}
+void solve(list<st>::iterator it){
+    char ch=it->op;
+    list<st>::iterator data=it;
+    list<st>::iterator it1=prev(data);
+    list<st>::iterator it2=prev(it1);
+    ll ans=com(it2->fig,it1->fig,ch);
+    it1->fig=ans;
+    res.erase(it2);
+    res.erase(data);
+}
+int main(){
+    ios::sync_with_stdio(0);
+    cin.tie(0);cout.tie(0);
+    cin>>s;
+    s+='@';
+    for(ll i=0;i<s.size();i++){
+        if(s[i]=='(')par.push_back(i);
+        if(s[i]==')'){
+            if(!par.empty())par.pop_back();
+            else s.erase(i,1),i--;
+        }
+    }
+    while(!par.empty()){
+        s.erase(par.back(),1);
+        par.pop_back();
+    }
+    for(ll i=0;i<s.size();i++){
+        ll neg=1;
+        if(s[i]=='-'&&(i==0||s[i-1]=='('||s[i-1]=='+'||s[i-1]=='-'||s[i-1]=='*'||s[i-1]=='/'||s[i-1]=='^')){
+            neg=-1;
+            i++;
+        }
+        if(s[i]>='0'&&s[i]<='9'){
+            ll k=0;
+            while(s[i]>='0'&&s[i]<='9'){
+                k*=10;
+                k+=s[i]-'0';
+                i++;
+            }
+            res.push_back({0,k*neg,'0'});
+        }
+        if(s[i]=='('){
+            op.push_back(s[i]);
+        }
+        else if(s[i]==')'){
+            while(!op.empty()&&op.back()!='('){
+                res.push_back({1,0,op.back()});
+                solve(prev(res.end()));
+                op.pop_back();
+            }
+            op.pop_back();
+        }
+        else if(s[i]=='^'){
+            op.push_back(s[i]);
+        }
+        else{
+            while(!op.empty()&&lev(op.back())>=lev(s[i])){
+                res.push_back({1,0,op.back()});
+                solve(prev(res.end()));
+                op.pop_back();
+            }
+            op.push_back(s[i]);
+        }
+    }
+    cout<<res.front().fig;
+    return 0;
+}

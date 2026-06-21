@@ -1,0 +1,18 @@
+@echo off
+:loop
+	data.exe > input.txt
+	brute.exe < input.txt > brute_out.txt
+	sol.exe < input.txt > sol_out.txt
+	fc brute_out.txt sol_out.txt > diff.txt
+	if errorlevel 1 goto diff
+	echo OK
+	goto loop
+:diff
+	echo WA
+	echo ---- Input ----
+	type input.txt
+	echo ---- Brute ----
+	type brute_out.txt
+	echo ---- Sol ----
+	type sol_out.txt
+	pause
