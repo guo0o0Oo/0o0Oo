@@ -3,7 +3,7 @@
         {
             "type": "cppbuild",
             "label": "tast gcc",
-            "command": "C:\\Program Files\\MinGW64\\bin\\g++.exe",
+            "command": "C:\\Program Files\\mingw64\\bin\\g++.exe",
             "args": [
                 "-fdiagnostics-color=always",
                 "-g",
