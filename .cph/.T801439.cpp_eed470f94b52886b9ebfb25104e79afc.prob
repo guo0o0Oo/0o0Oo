@@ -1,0 +1,1 @@
+{"name":"Local: T801439","url":"c:\\0o0Oo\\T801439.cpp","tests":[{"id":1787791291637,"input":"5\nfua\nv\nwpf\noloz\nseyz\nayus\nd\nlm\nn\nt\n\n","output":"0\n0\n2\n0\n0"}],"interactive":false,"memoryLimit":1024,"timeLimit":3000,"srcPath":"c:\\0o0Oo\\T801439.cpp","group":"local","local":true}
