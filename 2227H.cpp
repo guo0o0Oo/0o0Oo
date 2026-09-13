@@ -3,11 +3,10 @@ using namespace std;
 using ll=long long;
 const ll sup=0x3f3f3f3f3f3f3f3f;
 const ll inf=-0x3f3f3f3f3f3f3f3f;
-ll n,root,sze[200010],ans;
+ll n,root,sze[200010],ans,nowans,k;
 vector<ll> t[200010];
 ll init(ll node,ll last,ll dep){
     if(node!=root&&t[node].size()==1){
-        ans+=dep;
         sze[node]=1;
         return 1;
     }
@@ -19,15 +18,23 @@ ll init(ll node,ll last,ll dep){
     sze[node]=res;
     return res;
 }
-ll dfs(ll node,ll last,ll dep){
-    if(sze[node]<2)return 0;
+void dfs(ll node,ll last){
+    if(node!=root)ans+=sze[node]&1;
     for(auto i:t[node]){
         if(i==last)continue;
-        sze[node]-=dfs(i,node,dep+1);
+        dfs(i,node);
     }
-    ll k=sze[node]/2;
-    ans-=k*dep*2;
-    return k*2;
+}
+void odd(ll node,ll last){
+    if(node!=root){
+        k+=sze[node]&1?-1:1;
+    }
+    nowans=min(nowans,ans+k);
+    for(auto i:t[node]){
+        if(i==last)continue;
+        odd(i,node);
+    }
+    k-=sze[node]&1?-1:1;
 }
 int main(){
     ios::sync_with_stdio(0);
@@ -45,14 +52,17 @@ int main(){
             t[b].push_back(a);
         }
         for(ll i=1;i<=n;i++){
-            if(t[i].size()==1){
+            if(t[i].size()!=1){
                 root=i;
                 break;
             }
         }
         init(root,0,0);
-        dfs(root,0,0);
-        cout<<ans<<"\n";
+        dfs(root,0);
+        k=0;
+        nowans=ans;
+        if(sze[root]&1)odd(root,0);
+        cout<<nowans<<"\n";
     }
     return 0;
 }

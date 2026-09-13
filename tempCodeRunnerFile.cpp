@@ -1,0 +1,1 @@
+    if(dp[s.size()][n]>=0x3f3f3f3f3f3f)cout<<-1<<"\n";
