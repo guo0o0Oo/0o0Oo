@@ -17,10 +17,13 @@ void dfs(ll node){
     return;
 }
 void topol(){
-    que.push(0);
+    for(ll i=0;i<=m;i++){
+        if(in[i]==0)que.push(i);
+    }
     cnt[0]=1;
     while(!que.empty()){
-        ll u=que.front(),now=cnt[u];
+        ll u=que.front();
+        ll now=cnt[u];
         que.pop();
         for(ll i=G1[u].size()-1;i>=0;i--){
             ll v=G1[u][i];
@@ -62,7 +65,7 @@ int main(){
     topol();
     for(ll i=1;i<=n;i++)a[i]=a[i]*mul[0]%P;
     for(ll i=1;i<=m;i++)
-        if(add[i][0])a[add[i][0]]=(a[add[i][0]]+add[i][1]*cnt[i])%P;
+        if(add[i][0])a[add[i][0]]=(a[add[i][0]]+add[i][1]*cnt[i]%P)%P;
     for(ll i=1;i<=n;i++)cout<<a[i]<<" ";
     cout<<"\n";
     return 0;

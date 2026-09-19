@@ -2,53 +2,91 @@
 using namespace std;
 using ll=long long;
 using pr=pair<ll,ll>;
-const ll sup=0x3f3f3f3f3f3f3f3f;
-const ll inf=-0x3f3f3f3f3f3f3f3f;
+const ll inf=0x3f3f3f3f3f3f3f3f;
 const ll N=1e6+10;
-ll n,a[N],ans,eater[N],eatener[N];
+ll n,a[N];
 deque<pr> q1,q2;
 void solve(){
-    memset(eater,0,sizeof(eater));
-    memset(eatener,0,sizeof(eatener));
-    while(!q1.empty())q1.pop_back();
-    while(!q2.empty())q2.pop_back();
-    for(ll i=1;i<=n;i++)q1.push_front({a[i],i});
-    for(ll i=1;i<n;i++){
-        pr x,y;
-        if(q2.empty())x=q1.front(),q1.pop_front();
-        else if(q1.empty())x=q2.front(),q2.pop_front();
-        else{
-            if(q1.front()>=q2.front())x=q1.front(),q1.pop_front();
-            else x=q2.front(),q2.pop_front();
+    q1.clear();q2.clear();
+    for(ll i=n;i>=1;i--)q1.push_back({a[i],i});
+    ll cnt=0;
+    for(ll i=n;i>=2;i--){
+        pr now,mx,mn;
+        if(i==2){
+            if(cnt){
+                cout<<i+cnt-((cnt+1)&1)<<"\n";
+                return;
+            }
+            else{
+                cout<<1<<"\n";
+                return;
+            }
         }
-        if(q2.empty())y=q1.back(),q1.pop_back();
-        else if(q1.empty())y=q2.back(),q2.pop_back();
-        else{
-            if(q1.back()<=q2.back())y=q1.back(),q1.pop_back();
-            else y=q2.back(),q2.pop_back();
+        if(!q1.empty()&&!q2.empty()){
+            if(q1.front()>q2.front()){mx=q1.front();q1.pop_front();}
+            else {mx=q2.front();q2.pop_front();}
+            if(q1.back()<q2.back()){mn=q1.back();q1.pop_back();}
+            else {mn=q2.back();q2.pop_back();}
+            now={mx.first-mn.first,mx.second};
+            if((!q1.empty()&&now>q1.back())||(!q2.empty()&&now>q2.back())){
+                if(cnt){
+                    cout<<i+cnt-((cnt+1)&1)<<"\n";
+                    return;
+                }
+                q2.push_back(now);
+            }
+            else{
+                q2.push_back(now);
+                cnt++;
+            }
         }
-        eater[i]=x.second;
-        eatener[i]=y.second;
-        x.first-=y.first;
-        if(x.first>=q1.back().first)q1.push(x);
-        else q2.push(x);
-
+        else if(!q1.empty()){
+            mx=q1.front();q1.pop_front();
+            mn=q1.back();q1.pop_back();
+            now={mx.first-mn.first,mx.second};
+            if((!q1.empty()&&now>q1.back())||(!q2.empty()&&now>q2.back())){
+                if(cnt){
+                    cout<<i+cnt-((cnt+1)&1)<<"\n";
+                    return;
+                }
+                q2.push_back(now);
+            }
+            else{
+                q2.push_back(now);
+                cnt++;
+            }
+        }
+        else if(!q2.empty()){
+            mx=q2.front();q2.pop_front();
+            mn=q2.back();q2.pop_back();
+            now={mx.first-mn.first,mx.second};
+            if((!q1.empty()&&now>q1.back())||(!q2.empty()&&now>q2.back())){
+                if(cnt){
+                    cout<<i+cnt-((cnt+1)&1)<<"\n";
+                    return;
+                }
+                q2.push_back(now);
+            }
+            else{
+                q2.push_back(now);
+                cnt++;
+            }
+        }
     }
 }
 int main(){
     ios::sync_with_stdio(0);
     cin.tie(0);cout.tie(0);
     ll T;	cin>>T;
-    T--;
     cin>>n;
     for(ll i=1;i<=n;i++)cin>>a[i];
     solve();
+    T--;
     while(T--){
-        ll k,x,y;
-        cin>>k;
+        ll k;cin>>k;
         for(ll i=1;i<=k;i++){
-            cin>>x>>y;
-            a[x]=y;
+            ll p,now;cin>>p>>now;
+            a[p]=now;
         }
         solve();
     }
