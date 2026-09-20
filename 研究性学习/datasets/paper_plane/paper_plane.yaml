@@ -1,6 +1,0 @@
-path: .                     # 当前目录，即 paper_plane 文件夹
-train: images/train         # 相对于 path 的路径
-val: images/val
-
-names:
-  0: plane
