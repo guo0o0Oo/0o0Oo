@@ -1,16 +1,19 @@
 #include<bits/stdc++.h>
 using namespace std;
 using ll=long long;
-bool ifpr(ll x){
-    for(ll i=2;i<=sqrt(x);i++){
-        if(x%i==0){
-            return 0;
+ll MOD=1e9+7;
+ll qpow(ll x,ll k){
+    ll a=x,res=1;
+    while(k){
+        if(k&1){
+            res=res*a%MOD;
         }
+        a=a*a%MOD;
+        k>>=1;
     }
-    return 1;
+    return res;
 }
 int main(){
-	for(ll i=2;i<=31;i++){
-        if(ifpr(i))cout<<i<<",";
-    }
+	cout<<qpow(2,5);
+    return 0;
 }
